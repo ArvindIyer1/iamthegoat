@@ -1,84 +1,76 @@
+
 from collections import deque
+
 initial_state = (
-        ("A","Table"),
-        ("B","Table"),
-        ("C","Table"),
+    ("A", "Table"),
+    ("B", "Table"),
+    ("C", "Table")
+)
 
-        ) 
+goal_state = (
+    ("A", "B"),
+    ("B", "C"),
+    ("C", "Table")
+)
 
-final_state = (
-        ("A","B"),
-        ("B","C"),
-        ("C","Table"),
+def get_moves(state):
+    moves = []
 
-        ) 
+    # Find blocks that have another block on them
+    blocked = {pos for block, pos in state if pos != "Table"}
 
-def get_mv(state):
-    moves =[]
-
-    blocked = {x for x,y in state if y != "Table"}
-
-    for block,position in state:
+    for block, pos in state:
         if block in blocked:
             continue
 
-        if position != "Table" :
-            new_list = list(state)
+        # Move block to the table
+        if pos != "Table":
+            new_state = list(state)
 
-            for i,(b,p) in enumerate(new_list):
+            for i, (b, p) in enumerate(new_state):
                 if b == block:
-                    new_list[i] = (b,"Table")
+                    new_state[i] = (b, "Table")
 
-            moves.append(tuple(new_list))
+            moves.append(tuple(new_state))
 
+        # Move block onto another clear block
         for dest, _ in state:
-            if dest == block:
-                continue
-            
-            if dest in blocked :
-                continue
+            if dest != block and dest not in blocked and pos != dest:
+                new_state = list(state)
 
-            if position == dest :
-                continue
+                for i, (b, p) in enumerate(new_state):
+                    if b == block:
+                        new_state[i] = (b, dest)
 
-            new_list = list(state)
-
-            for i,(b,p) in enumerate(new_list):
-                if b == block:
-                    new_list[i] = (b,dest)
-
-            moves.append(tuple(new_list))
+                moves.append(tuple(new_state))
 
     return moves
 
-
-def bfs(ini,goal):
-    queue = deque([(ini,[])])
-    visited = {ini}
+def bfs(start, goal):
+    queue = deque([(start, [start])])
+    visited = {start}
 
     while queue:
-        state,path = queue.popleft()
+        state, path = queue.popleft()
 
         if state == goal:
-            return path + [state]
+            return path
 
-        for nxt_state in get_mv(state):
-            if nxt_state not in visited:
-                visited.add(nxt_state)
-                queue.append((nxt_state,path +[state]))
+        for next_state in get_moves(state):
+            if next_state not in visited:
+                visited.add(next_state)
+                queue.append((next_state, path + [next_state]))
 
     return None
 
-solution = bfs(initial_state, final_state)
+solution = bfs(initial_state, goal_state)
 
 if solution:
-    print("solution found")
+    print("Solution found!")
 
     for i, state in enumerate(solution):
-        print(f"Step:{i}")
+        print("Step:", i)
         print(state)
         print()
-
-else :
-    print("No solution Found")
-
+else:
+    print("No solution found")
