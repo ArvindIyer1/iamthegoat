@@ -1,38 +1,33 @@
-n = int(input("Enter number of rows :"))
-m = int(input("Enter number of columns :"))
+grid = [
+    ["S", ".", "."],
+    ["X", ".", "."],
+    [".", ".", "G"]
+]
 
-grid = []
-print("Enter the grid :")
-for i in range (n):
-    grid.append(input().split())
+moves = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
-row = 0
-col = 0 
+row, col = 0, 0
 visited = []
 
 while True:
-    visited.append((row,col))
-    print("Current Position",(row,col))
+    visited.append((row, col))
+    print("Current position:", (row, col))
 
-    if(grid[row][col] == 'G'):
-        print("Goal is reached")
+    if grid[row][col] == "G":
+        print("Goal reached")
         break
 
-    if( col <col-1 and grid[row][col+1] != 'X' and (row,col+1) not in visited):
-        col = col +1
+    moved = False
+    for dr, dc in moves:
+        nr, nc = row + dr, col + dc
+        if 0 <= nr < 3 and 0 <= nc < 3:
+            if grid[nr][nc] != "X" and (nr, nc) not in visited:
+                row, col = nr, nc
+                moved = True
+                break
 
-    elif(row < row-1 and grid[row+1][col] != 'X' and (row+1,col) not in visited):
-        row = row +1
-    
-    elif(row > 0 and grid[row-1][col] != 'X' and (row-1,col) not in visited):
-        row = row -1
-
-    elif(col > 0 and grid[row-1][col] != 'X' and (row,col-1) not in visited ):
-        col = col -1
-
-    else :
+    if not moved:
         print("No path found")
-        break 
-    
+        break
 
-print("visited cells :", visited)
+print("Visited cells:", visited)
