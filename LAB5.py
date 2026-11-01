@@ -1,3 +1,5 @@
+# Use BFS to solve a planning problem. Examples can be 8 puzzle problems, Robot path
+# planning, Blocks world etc.
 from collections import deque
 
 initial_state = (
@@ -14,11 +16,11 @@ goal_state = (
 
 
 def next_states(state):
-    blocked = {block for block, on in state if on != "Table"}
+    blocked_blocks = {on for block, on in state if on != "Table"}
     result = []
 
     for block, on in state:
-        if block in blocked:
+        if block in blocked_blocks:
             continue
 
         if on != "Table":
@@ -30,8 +32,8 @@ def next_states(state):
                     new_state.append((b, o))
             result.append((tuple(sorted(new_state)), "Move " + block + " to Table"))
 
-        for target, target_on in state:
-            if target == block or target in blocked:
+        for target, _ in state:
+            if target == block or target in blocked_blocks:
                 continue
             new_state = []
             for b, o in state:

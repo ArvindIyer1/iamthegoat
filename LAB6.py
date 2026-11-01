@@ -1,3 +1,5 @@
+#N- queens problem
+
 def print_board(board, n):
     for i in range(n):
         for j in range(n):

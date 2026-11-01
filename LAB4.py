@@ -1,3 +1,5 @@
+# Tower of Hanoi by State Space Search.
+
 def move(peg1, peg2, name1, name2):
     if not peg1:
         disk = peg2.pop()
@@ -18,6 +20,10 @@ def move(peg1, peg2, name1, name2):
 
 
 n = int(input("Enter number of disks: "))
+
+if n < 0:
+    print("Number of disks cannot be negative.")
+    exit()
 
 pegs = {
     "A": list(range(n, 0, -1)),

@@ -1,3 +1,6 @@
+# Design and implement a simple reflex agent for the Vacuum Cleaner world
+# and analyze its rational behavior in a given environment.
+
 state = {"A": "Dirty", "B": "Dirty"}
 
 

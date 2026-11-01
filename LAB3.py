@@ -1,3 +1,4 @@
+# A* search for the 8-puzzle problem.
 goal = [[1, 2, 3],
         [4, 5, 6],
         [7, 8, 0]]
@@ -6,6 +7,7 @@ moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 
 def heuristic(state):
+    """Count tiles that are not in their goal positions."""
     count = 0
     for i in range(3):
         for j in range(3):
@@ -32,12 +34,13 @@ def display(state):
 
 
 def astar(start):
-    open_list = [to_tuple(start)]
-    g_cost = {to_tuple(start): 0}
-    parent = {to_tuple(start): None}
+    start_key = to_tuple(start)
+    open_list = [start_key]
+    cost = {start_key: 0}
+    parent = {start_key: None}
 
     while open_list:
-        key = min(open_list, key=lambda k: g_cost[k] + heuristic(k))
+        key = min(open_list, key=lambda state: cost[state] + heuristic(state))
         open_list.remove(key)
         current = [list(row) for row in key]
 
@@ -56,9 +59,9 @@ def astar(start):
                 next_state = [row[:] for row in current]
                 next_state[x][y], next_state[nx][ny] = next_state[nx][ny], next_state[x][y]
                 next_key = to_tuple(next_state)
-                new_cost = g_cost[key] + 1
-                if next_key not in g_cost or new_cost < g_cost[next_key]:
-                    g_cost[next_key] = new_cost
+                new_cost = cost[key] + 1
+                if next_key not in cost or new_cost < cost[next_key]:
+                    cost[next_key] = new_cost
                     parent[next_key] = key
                     if next_key not in open_list:
                         open_list.append(next_key)
