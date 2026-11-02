@@ -1,46 +1,34 @@
-# Model-based agent for navigating a grid with obstacles.
+# Model-Based Intelligent Agent
+
 grid = [
-    ["S", ".", "."],
-    ["X", ".", "."],
-    [".", ".", "G"]
+    ['S', '.', '.'],
+    ['X', '.', '.'],
+    ['.', '.', 'G']
 ]
 
 row = 0
 col = 0
 visited = []
-directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 while True:
-    position = (row, col)
-    visited.append(position)
-    print("Current position:", position)
+    visited.append((row, col))
+    print("Current Position:", (row, col))
 
-    if grid[row][col] == "G":
+    if grid[row][col] == 'G':
         print("Goal Reached!")
         break
 
-    moved = False
-    for row_change, col_change in directions:
-        next_row = row + row_change
-        next_col = col + col_change
+    if col < len(grid[0]) - 1 and grid[row][col + 1] != 'X':
+        col += 1
 
-        inside_grid = (
-            0 <= next_row < len(grid)
-            and 0 <= next_col < len(grid[0])
-        )
-        next_position = (next_row, next_col)
+    elif row < len(grid) - 1 and grid[row + 1][col] != 'X':
+        row += 1
 
-        if (
-            inside_grid
-            and grid[next_row][next_col] != "X"
-            and next_position not in visited
-        ):
-            row, col = next_row, next_col
-            moved = True
-            break
-
-    if not moved:
-        print("No path found!")
+    else:
+        print("No Path Found!")
         break
 
-print("Visited cells:", visited)
+print("Visited Cells:", visited)
+
+
+so this is right ?
